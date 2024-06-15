@@ -1,0 +1,58 @@
+#include <iostream>
+#include <cmath>
+
+// Функция, для которой считаем интеграл
+double f(double x) {
+return exp(-2x) * sin(23x);
+}
+
+// Метод прямоугольников
+double rectangularIntegration(double a, double b, int n) {
+double h = (b - a) / n;
+double sum = 0.0;
+for(int i = 0; i < n; i++) {
+sum += f(a + h*i);
+}
+return h * sum;
+}
+
+// Метод трапеций
+double trapezoidalIntegration(double a, double b, int n) {
+double h = (b - a) / n;
+double sum = (f(a) + f(b)) / 2.0;
+for(int i = 1; i < n; i++) {
+sum += f(a + h*i);
+}
+return h * sum;
+}
+
+// Метод Симпсона (парабол)
+double simpsonIntegration(double a, double b, int n) {
+double h = (b - a) / n;
+double sum = f(a) + f(b);
+for(int i = 1; i < n; i++) {
+sum += 2 * f(a + h*i);
+}
+for(int i = 1; i <= n; i++) {
+sum += 4 * f(a + h * (i - 0.5));
+}
+return h/6 * sum;
+}
+
+int main() {
+double a = 0.0;
+double b = 100.0; // Положительная бесконечность
+int n = 1000000; // Количество разбиений
+
+c
+Copy code
+double integralRectangular = rectangularIntegration(a, b, n);
+double integralTrapezoidal = trapezoidalIntegration(a, b, n);
+double integralSimpson = simpsonIntegration(a, b, n);
+
+std::cout << "Integral value using Rectangular method: " << integralRectangular << std::endl;
+std::cout << "Integral value using Trapezoidal method: " << integralTrapezoidal << std::endl;
+std::cout << "Integral value using Simpson method: " << integralSimpson << std::endl;
+
+return 0;
+}
