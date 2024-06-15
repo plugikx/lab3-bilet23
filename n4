@@ -1,0 +1,41 @@
+#include <iostream>
+#include <cmath>
+#include <limits>
+
+// Функция для вычисления члена ряда
+double series_term(int k, double x) {
+    if (std::abs(std::sin(k * x)) < std::numeric_limits<double>::epsilon()) {
+        throw std::runtime_error("Деление на ноль в терме ряда");
+    }
+    return std::pow(-1, k) / std::sin(k * x) + 23 + std::pow(k, 2);
+}
+
+// Функция для вычисления суммы ряда с точностью до epsilon
+double sum_series(double x, double epsilon = 1e-6) {
+    double sum = 0;
+    int k = 1;
+    double term = series_term(k, x);
+
+    while (std::abs(term) > epsilon) {
+        sum += term;
+        ++k;
+        term = series_term(k, x);
+    }
+
+    return sum;
+}
+
+int main() {
+    double x;
+    std::cout << "Введите значение x: ";
+    std::cin >> x;
+
+    try {
+        double result = sum_series(x);
+        std::cout << "Сумма ряда: " << result << std::endl;
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Ошибка: " << e.what() << std::endl;
+    }
+
+    return 0;
+}
