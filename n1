@@ -1,0 +1,79 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+double f(double x) {
+return 1 / (pow(x, 4) * (23 + pow(x, 2)));
+}
+
+double rectangular_integration(double a, double b, int n) {
+double h = (b - a) / n;
+double sum = 0.0;
+for (int i = 0; i < n; i++) {
+sum += f(a + h * (i + 0.5));
+}
+return h * sum;
+}
+
+double trapezoidal_integration(double a, double b, int n) {
+double h = (b - a) / n;
+double sum = f(a) + f(b);
+for (int i = 1; i < n; i++) {
+sum += 2 * f(a + h * i);
+}
+return h * sum / 2;
+}
+
+double simpson_integration(double a, double b, int n) {
+double h = (b - a) / n;
+double sum = f(a) + f(b);
+for (int i = 1; i < n; i++) {
+sum += (i % 2 == 0) ? 2 * f(a + h * i) : 4 * f(a + h * i);
+}
+return h * sum / 3;
+}
+
+int main() {
+double a = 1.0;
+double b = 2.0;
+double epsilon = 1e-6;
+
+int n = 1;
+double prev_result = 0.0;
+double result = rectangular_integration(a, b, n);
+
+while (abs(result - prev_result) >= epsilon) {
+    prev_result = result;
+    n *= 2;
+    result = rectangular_integration(a, b, n);
+}
+
+cout << "Rectangular method result: " << result << endl;
+
+n = 1;
+prev_result = 0.0;
+result = trapezoidal_integration(a, b, n);
+
+while (abs(result - prev_result) >= epsilon) {
+    prev_result = result;
+    n *= 2;
+    result = trapezoidal_integration(a, b, n);
+}
+
+cout << "Trapezoidal method result: " << result << endl;
+
+n = 1;
+prev_result = 0.0;
+result = simpson_integration(a, b, n);
+
+while (abs(result - prev_result) >= epsilon) {
+    prev_result = result;
+    n *= 2;
+    result = simpson_integration(a, b, n);
+}
+
+cout << "Simpson method result: " << result << endl;
+
+return 0;
+}
